@@ -1,0 +1,66 @@
+powershell script to turn monitor off
+
+Add-Type -TypeDefinition @"
+using System;
+using System.Runtime.InteropServices;
+public class MonitorControl {
+    [DllImport("user32.dll")]
+    public static extern bool SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
+    public const int WM_SYSCOMMAND = 0x0112;
+    public const int SC_MONITORPOWER = 0xF170;
+    public const int MONITOR_OFF = 2;
+    public static void TurnOffMonitor() {
+        SendMessage(new IntPtr(0xFFFF), WM_SYSCOMMAND, (IntPtr)SC_MONITORPOWER, (IntPtr)MONITOR_OFF);
+    }
+}
+"@
+[MonitorControl]::TurnOffMonitor()
+
+save as "TurnOffMonitor.ps1"
+
+powershell -ExecutionPolicy Bypass -File "path\to\TurnOffMonitor.ps1"
+
+
+script to turn monitor on
+
+Add-Type -AssemblyName System.Windows.Forms
+[System.Windows.Forms.SendKeys]::SendWait("{NUMLOCK}")
+
+
+save as "TurnOnMonitor.ps1"
+
+powershell -ExecutionPolicy Bypass -File "path\to\TurnOnMonitor.ps1"
+
+TODO
+
+Create python script that can detect what day it is and what time it is, if 
+it is a school time on a school day and my phone is not connecyed to my pc
+by bluetooth, enter Server mode where i can remotely connect to it, it loads
+queued projects or scripts and puts the output in a file or keeps it running
+when it connects to my phones bluetooth or it thinks i should be at home
+3:40 pm it enters PC mode where it will be ready for me to use it and pause
+any project or script it has running, if it is in PC mode for more than 10
+miniutes and has not detected any activity it will enter SEMI server mode
+where it will run scripts in increments, i will be able to run commands
+from my phone or laptop but nothing else, i can switch from server mode to
+this mode at any time with one command which i can send, and i just had a
+idea it never goes immediently between SERVER mode and PC mode it has to go
+through SEMI mode which begins being a server incrementaly, the more time it
+is in SEMI mode the more server like it becomes until it had been in semi mode
+for 1 hour then it turns into server mode, it also takes 10 mins to switch modes
+so SERVER MODE TO SEMI mode is 10 mins, SEMI mode to PC mode is 10 mins, PC mode
+to SEMI mode is 10 mins, it also detects habits of when it normally goes into
+SEMI mode, SERVER mode or PC mode and chooses what to do baced off that data,
+as updates are released for this additional modes may be added like a dedicated
+GPU or CPU mode or a Remote Desktop mode and loading times may increase or decrease
+and data may become better, may introduce a more lightweight server that detects
+whats running in PC mode and sees if it can run a program without slowing down the
+computer and then runs that program as a micro server. I will add something to it
+where if the server needs to reset it will let me know 3 days in advance, and will
+choose the least active time to reset, additionaly if computer is unexpectedly
+truned off i will recive a update and will ever mark in different ways, i must
+iniciate all shutdowns remotely from ever my phone or laptop, unexpected shutdowns
+may cause data loss or system loss, makes sure all programs save all data every 
+5 minutes and its data is saved every 5 minutes and checks everything baced on what
+mode it in, PC mode checks once every 15 mins, SERVER mode once every 30 mins and
+SEMI mode once every 5 mins.
